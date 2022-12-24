@@ -3,6 +3,7 @@ package com.example.recyclerviewapi
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.renderscript.ScriptGroup.Binding
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recyclerviewapi.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -14,6 +15,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var adapter: DogAdapter
+    private val dogImages = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +26,9 @@ class MainActivity : AppCompatActivity() {
 
     }
     private fun initReciclerView(){
-
+        adapter = DogAdapter(dogImages)
+         binding.rvDogs.layoutManager = LinearLayoutManager(this)
+        binding.rvDogs.adapter = adapter
 
     }
 
@@ -34,7 +39,7 @@ class MainActivity : AppCompatActivity() {
             .build()
     }
 
-    private fun searchByName(query: String) {
+            private fun searchByName(query: String) {
         CoroutineScope(Dispatchers.IO).launch {
             val call = getRetrofit().create(APIService::class.java).getDogsByBreeds("$query/images")
             val puppies: DogsResponse? = call.body()
