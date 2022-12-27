@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.O
 
     private fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://dog.ceo/api/breeds/")
+            .baseUrl("https://dog.ceo/api/breed/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
