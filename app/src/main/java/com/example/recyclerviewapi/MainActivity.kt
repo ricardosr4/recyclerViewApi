@@ -3,6 +3,9 @@ package com.example.recyclerviewapi
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.renderscript.ScriptGroup.Binding
+import android.widget.SearchView
+import android.widget.Toast
+import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recyclerviewapi.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
@@ -12,7 +15,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: DogAdapter
@@ -20,14 +23,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding=ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.svDogs.setOnQueryTextListener(this)
         initReciclerView()
 
     }
-    private fun initReciclerView(){
+
+    private fun initReciclerView() {
         adapter = DogAdapter(dogImages)
-         binding.rvDogs.layoutManager = LinearLayoutManager(this)
+        binding.rvDogs.layoutManager = LinearLayoutManager(this)
         binding.rvDogs.adapter = adapter
 
     }
@@ -39,18 +44,39 @@ class MainActivity : AppCompatActivity() {
             .build()
     }
 
-            private fun searchByName(query: String) {
+    private fun searchByName(query: String) {
         CoroutineScope(Dispatchers.IO).launch {
             val call = getRetrofit().create(APIService::class.java).getDogsByBreeds("$query/images")
             val puppies: DogsResponse? = call.body()
-            if (call.isSuccessful) {
-                //show reciclerView
-            } else {
-                //show error
+            runOnUiThread {
+                if (call.isSuccessful) {
+                    val images: List<String> = puppies?.images ?: emptyList()
+                    dogImages.clear()
+                    dogImages.addAll(images)
+                    adapter.notifyDataSetChanged()
+                } else {
+                    showError()
+                }
+
+
             }
 
-
         }
+    }
 
+    private fun showError() {
+        Toast.makeText(this, "ha ocurrido un error", Toast.LENGTH_SHORT).show()
+
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        if (!query.isNullOrEmpty()) {
+            searchByName(query.toLowerCase())
+        }
+        return true
+    }
+
+    override fun onQueryTextChange(query: String?): Boolean {
+        return true
     }
 }

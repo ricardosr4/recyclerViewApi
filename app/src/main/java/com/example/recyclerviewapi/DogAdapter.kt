@@ -15,7 +15,6 @@ class DogAdapter(val images:List<String>):RecyclerView.Adapter<DogViewHolder>() 
         holder.bind(item )
     }
 
-    override fun getItemCount(): Int {
-        return images.size
+    override fun getItemCount(): Int = images.size
+
     }
-}
