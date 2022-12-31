@@ -9,6 +9,8 @@
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/svDogs"
+        android:layout_margin="6dp"
+        android:background="#9ED1EB"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintVertical_bias="0"
@@ -20,6 +22,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvDogs"
+        android:background="#8BC5F3"
+        android:layout_margin="6dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
