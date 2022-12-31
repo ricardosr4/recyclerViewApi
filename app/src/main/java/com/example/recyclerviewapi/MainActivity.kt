@@ -2,10 +2,12 @@ package com.example.recyclerviewapi
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recyclerviewapi.databinding.ActivityMainBinding
+import com.google.android.material.internal.ViewUtils.hideKeyboard
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -54,11 +56,18 @@ class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.O
                 } else {
                     showError()
                 }
-
+                hideKeyboard()
 
             }
 
         }
+    }
+
+    private fun hideKeyboard() {
+
+            val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(binding.viewRoot.windowToken, 0)
+
     }
 
     private fun showError() {
@@ -81,3 +90,4 @@ class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.O
 private fun SearchView.setOnQueryTextListener(mainActivity: MainActivity) {
 
 }
+
