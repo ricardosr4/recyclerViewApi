@@ -9,8 +9,8 @@ class DogViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     private val binding = ItemDogBinding.bind(view)
 
-    fun bind(image: String) {
-        Picasso.get().load(image).into(binding.ivDog)
+    fun bind(message: String) {
+        Picasso.get().load(message).into(binding.ivDog)
 
 
     }

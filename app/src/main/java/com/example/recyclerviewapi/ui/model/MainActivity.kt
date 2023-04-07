@@ -1,20 +1,21 @@
-package com.example.recyclerviewapi
+package com.example.recyclerviewapi.ui.model
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
-import android.widget.SearchView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.recyclerviewapi.APIService
+import com.example.recyclerviewapi.DogAdapter
+import com.example.recyclerviewapi.DogsResponse
 import com.example.recyclerviewapi.databinding.ActivityMainBinding
-import com.google.android.material.internal.ViewUtils.hideKeyboard
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.OnQueryTextListener {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: DogAdapter
@@ -24,8 +25,10 @@ class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.O
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.svDogs.setOnQueryTextListener(this)
         initRecyclerView()
+
+
+
 
     }
 
@@ -38,20 +41,20 @@ class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.O
 
     private fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://dog.ceo/api/breed/")
+            .baseUrl("https://dog.ceo/api/breed/list")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
     private fun searchByName(query: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            val call = getRetrofit().create(APIService::class.java).getDogsByBreeds("$query/images")
-            val puppies: DogsResponse? = call.body()
+            val call = getRetrofit().create(APIService::class.java).getDogsByBreeds("$query/list")
+            val puppies = call.body()
             runOnUiThread {
                 if (call.isSuccessful) {
-                    val images: List<String> = puppies?.images ?: emptyList()
+                    val message: List<String> = puppies?.message ?: emptyList()
                     dogImages.clear()
-                    dogImages.addAll(images)
+                    dogImages.addAll(message)
                     adapter.notifyDataSetChanged()
                 } else {
                     showError()
@@ -63,10 +66,11 @@ class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.O
         }
     }
 
+    //ocultar teclado despues de escribir (hideKeyboard)
     private fun hideKeyboard() {
 
-            val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(binding.viewRoot.windowToken, 0)
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.viewRoot.windowToken, 0)
 
     }
 
@@ -75,19 +79,5 @@ class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.O
 
     }
 
-    override fun onQueryTextSubmit(query: String?): Boolean {
-        if (!query.isNullOrEmpty()) {
-            searchByName(query.toLowerCase())
-        }
-        return true
-    }
-
-    override fun onQueryTextChange(query: String?): Boolean {
-        return true
-    }
-}
-
-private fun SearchView.setOnQueryTextListener(mainActivity: MainActivity) {
 
 }
-
