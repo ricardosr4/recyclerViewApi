@@ -1,4 +1,4 @@
-package com.example.recyclerviewapi
+package com.example.recyclerviewapi.ui.adapters
 
 import android.view.View
 import android.widget.Toast

@@ -1,9 +1,9 @@
-package com.example.recyclerviewapi
+package com.example.recyclerviewapi.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlin.coroutines.coroutineContext
+import com.example.recyclerviewapi.R
 
 class DogAdapter(private val message:List<String>,):RecyclerView.Adapter<DogViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DogViewHolder {

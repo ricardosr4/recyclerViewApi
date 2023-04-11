@@ -1,12 +1,12 @@
-package com.example.recyclerviewapi.ui.model
+package com.example.recyclerviewapi.ui.activity
 
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.recyclerviewapi.network.APIService
-import com.example.recyclerviewapi.DogAdapter
+import com.example.recyclerviewapi.data.network.APIService
+import com.example.recyclerviewapi.ui.adapters.DogAdapter
 import com.example.recyclerviewapi.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
