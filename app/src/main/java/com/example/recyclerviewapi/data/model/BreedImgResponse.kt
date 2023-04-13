@@ -1,3 +1,6 @@
 package com.example.recyclerviewapi.data.model
 
-data class BreedImgResponse(val status: String, val message: String)
+data class BreedImgResponse(
+    val message: String,
+    val status: String
+    )
